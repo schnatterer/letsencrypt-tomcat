@@ -1,0 +1,19 @@
+Let's encrypt Tomcat!
+========
+
+Showcase Tomcat Docker Image that automatically fetches and renews certificates via letsencrypt. 
+
+Uses 
+* [bitmai's Tomcat Docker image](https://hub.docker.com/r/bitnami/tomcat) as base,
+* [dehydrated](http://dehydrated.io/) to manage certs, and
+* [tomcat-reloading-connector](https://github.com/schnatterer/tomcat-reloading-connector) for reloading images without 
+  restarting tomcat. 
+  
+# Usage
+
+Make sure to set the DNS record to match your IP address first.
+
+```bash
+docker build -t schnatterer/letsencrypt-tomcat
+sudo docker run --rm -it -p80:80 -p443:443 -eSTAGING=true -eDOMAIN=example.com schnatterer/letsencrypt-tomcat
+```
