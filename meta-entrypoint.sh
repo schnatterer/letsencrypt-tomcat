@@ -3,6 +3,7 @@ set -o errexit -o nounset -o pipefail
 
 # TODO fail on empty
 export DOMAIN=${DOMAIN:-''}
+LOCAL_HTTP_PORT=${LOCAL_HTTP_PORT:-8080}
 # Use staging to avoid letsencrypt's rate limits!
 STAGING=${STAGING:-'false'}
 export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Ddomain=${DOMAIN}" 
@@ -17,7 +18,7 @@ function main() {
     
     fetchCerts &
     
-    exec authbind --deep /opt/bitnami/scripts/tomcat/entrypoint.sh "$@" 
+    exec /opt/bitnami/scripts/tomcat/entrypoint.sh "$@" 
 }
 
 function fetchCerts() {
@@ -26,8 +27,8 @@ function fetchCerts() {
      echo 'CA="https://acme-staging-v02.api.letsencrypt.org/directory"' >> /etc/dehydrated/config
    fi
    
-   green "Waiting for tomcat to become ready"
-   while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:80)" != "404" ]]; do sleep 1; done
+   green "Waiting for tomcat to become ready on localhost:${LOCAL_HTTP_PORT}"
+   while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:${LOCAL_HTTP_PORT})" -ge 500 ]]; do sleep 1; done
    green "Tomcat is ready."
 
     trap 'SIG_INT_RECEIVED="true" && green "Stopping certifcate process"' INT 
