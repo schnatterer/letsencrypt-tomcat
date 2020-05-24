@@ -20,9 +20,11 @@ COPY tomcat /dist/opt/bitnami/tomcat/
 COPY meta-entrypoint.sh /dist/app/
 COPY createCerts.sh /dist/app/
 COPY etc /dist/etc
+RUN mkdir /dist/etc/dehydrated/certs/
 RUN chmod -R 770 /dist
 
 FROM tomcat
+VOLUME /etc/dehydrated/certs/
 COPY --from=aggregator-user --chown=1001:0 /dist /
 ENTRYPOINT [ "/usr/local/bin/dumb-init", "--", "/app/meta-entrypoint.sh" ]
 CMD [ "/opt/bitnami/scripts/tomcat/run.sh" ]

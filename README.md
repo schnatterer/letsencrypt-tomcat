@@ -17,5 +17,13 @@ Make sure to set the DNS record to match your IP address first.
 
 ```bash
 docker build -t schnatterer/letsencrypt-tomcat
-sudo docker run --rm -it -p80:8080 -p443:8443 -eSTAGING=true -eDOMAIN=example.com schnatterer/letsencrypt-tomcat
+sudo docker run --rm -it \
+  -p80:8080 -p443:8443 \
+  -eDOMAIN=example.com \
+  # You might want to persist your certs
+  -v certs:/etc/dehydrated/certs/
+  # Avoid letsencrypt rate limit for testing
+  -eSTAGING=true \ 
+  schnatterer/letsencrypt-tomcat
 ```
+
