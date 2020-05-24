@@ -18,7 +18,6 @@ RUN mkdir -p /dist/opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge
 
 COPY tomcat /dist/opt/bitnami/tomcat/
 COPY meta-entrypoint.sh /dist/app/
-COPY createCerts.sh /dist/app/
 COPY etc /dist/etc
 RUN mkdir /dist/etc/dehydrated/certs/
 RUN chmod -R 770 /dist
