@@ -15,15 +15,17 @@ Uses
 
 Make sure to set the DNS record to match your IP address first.
 
+Note that:
+- `-v...` Persists your cert in a volume `certs` if left out an anonymous volume is used
+- `eSTAGING=true` - creates certs against letsencrypt staging, which has no rate limit but is not accepted by your 
+  browser.
+
 ```bash
-docker build -t schnatterer/letsencrypt-tomcat
 sudo docker run --rm -it \
   -p80:8080 -p443:8443 \
   -eDOMAIN=example.com \
-  # You might want to persist your certs
-  -v certs:/etc/dehydrated/certs/
-  # Avoid letsencrypt rate limit for testing
-  -eSTAGING=true \ 
+  -v certs:/etc/dehydrated/certs/ \
+  -eSTAGING=true \
   schnatterer/letsencrypt-tomcat
 ```
 
