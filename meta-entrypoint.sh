@@ -19,7 +19,7 @@ function main() {
     
     fetchCerts &
     
-    exec /opt/bitnami/scripts/tomcat/entrypoint.sh "$@" 
+    exec "$@" 
 }
 
 createSelfSignedCert() {
@@ -56,6 +56,7 @@ createSelfSignedCert() {
     else
        echo "Certificate found, skipping creation (cert location: ${CERT_DIR}/${cert})"
     fi
+    cd -
 }
 
 function fetchCerts() {

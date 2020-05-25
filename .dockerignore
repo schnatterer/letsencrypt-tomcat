@@ -1,7 +1,9 @@
 # Ignore all
 *
 # Whitelist
-!createCerts.sh
 !meta-entrypoint.sh
 !etc
-!tomcat
+!standalone
+!spring-boot
+spring-boot/target
+spring-boot/Dockerfile

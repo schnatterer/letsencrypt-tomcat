@@ -1,0 +1,16 @@
+#!/bin/bash
+# -o nounset because some values are magically set by docker cloud build
+set -o errexit -o pipefail
+
+# Don't use docker cloud build's IMAGE_NAME, because it already contains the tag latest.
+IMAGE_NAME=schnatterer/letsencrypt-tomcat
+
+function main() {
+    docker build -t schnatterer/letsencrypt-tomcat  --file=standalone/Dockerfile .
+    docker push schnatterer/letsencrypt-tomcat
+    
+    docker build -t schnatterer/letsencrypt-tomcat:spring-boot  --file=spring-boot/Dockerfile .
+    docker push schnatterer/letsencrypt-tomcat:spring-boot
+}
+
+main "$@"
