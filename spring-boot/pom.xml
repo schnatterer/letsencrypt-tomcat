@@ -39,6 +39,7 @@
             </exclusions>
         </dependency>
         <dependency>
+            <!-- Make tomcat can automatically reload certificates at runtime -->
             <groupId>info.schnatterer.tomcat-reloading-connector</groupId>
             <artifactId>reloading-connector-spring-boot</artifactId>
             <version>0.1.2-SNAPSHOT</version>

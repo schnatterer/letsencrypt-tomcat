@@ -13,14 +13,47 @@ Uses
   * [bitmai's Tomcat Docker image](https://hub.docker.com/r/bitnami/tomcat) or
   * spring-boot.
   
-# Usage
+Try out by [running examples](#Run-Examples).
+
+# Build your own image
+
+The building blocks are conveniently packaged into a docker image: `schnatterer/letsencrypt-tomcat`.
+This image is neither intended to be used as base image nor to be run itself.
+It's a mere container were you can copy the components needed for your app.
+
+It contains the following directories:
+
+* `/letsencrypt` necessary for all apps:
+  * `dehydrated` for cert retrival
+  * `dumb-init` for properly handling your main process and the certificate process
+  * `meta-entrypoint.sh` for launching the processes
+* `/tomcat-reloading-connector` necessary for standalone tomcat instances so they can reload the certificate at runtime  
+  See [standalone example](standalone).
+* `/lib` - pre-compiled version of Apache Portable Runtime (APR) and JNI wrappers for APR used by Tomcat (libtcnative).  
+  Requires glibc and openssl.  
+  See [spring-boot example](spring-boot).  
+  For other libc libraries see [here](https://tomcat.apache.org/tomcat-9.0-doc/apr.html) for compiling your own APR libs.
+
+So in your Dockerfile just copy what you need as shown in examples.
+For the whole process to work, your container requires the following packages:
+
+* bash,
+* openssl and
+* curl
+
+# Configuration at runtime
+
+* Mandatory: Env var `DOMAIN` that passes the TLD to be used for requesting certificates for
+* Optional: Env var `STAGING`. If set to `true` creates certs against letsencrypt staging, which has no rate limit but 
+  is not accepted by your browser.
+* Persistence: Your certs are stored inside your container at `/certs/` so you might want to persist this folder. 
+
+# Run Examples
 
 Make sure to set the DNS record to match your IP address first.
 
 Note that:
 - `-v...` Persists your cert in a volume `certs` if left out an anonymous volume is used
-- `eSTAGING=true` - creates certs against letsencrypt staging, which has no rate limit but is not accepted by your 
-  browser.
 
 ```bash
 sudo docker run --rm -it \
@@ -28,7 +61,7 @@ sudo docker run --rm -it \
   -eDOMAIN=example.com \
   -v certs:/certs/ \
   -eSTAGING=true \
-  schnatterer/letsencrypt-tomcat
+  schnatterer/letsencrypt-tomcat:standalone
 # or
 # schnatterer/letsencrypt-tomcat:spring-boot
 ```
@@ -36,6 +69,9 @@ sudo docker run --rm -it \
 # Building
 
 ```bash
-docker build -t schnatterer/letsencrypt-tomcat --file=standalone/Dockerfile .
+# First build the base image ( packages the building blocks for letsencrypt tomcat)
+docker build -t schnatterer/letsencrypt-tomcat .
+# Build the examples 
+docker build -t schnatterer/letsencrypt-tomcat:standalone --file=standalone/Dockerfile .
 docker build -t schnatterer/letsencrypt-tomcat:spring-boot --file=spring-boot/Dockerfile .
 ```

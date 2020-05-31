@@ -6,8 +6,11 @@ set -o errexit -o pipefail
 IMAGE_NAME=schnatterer/letsencrypt-tomcat
 
 function main() {
-    docker build -t schnatterer/letsencrypt-tomcat  --file=standalone/Dockerfile .
+    docker build -t schnatterer/letsencrypt-tomcat .
     docker push schnatterer/letsencrypt-tomcat
+    
+    docker build -t schnatterer/letsencrypt-tomcat:standalone  --file=standalone/Dockerfile .
+    docker push schnatterer/letsencrypt-tomcat:standalone
     
     docker build -t schnatterer/letsencrypt-tomcat:spring-boot  --file=spring-boot/Dockerfile .
     docker push schnatterer/letsencrypt-tomcat:spring-boot
