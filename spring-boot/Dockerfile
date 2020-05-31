@@ -1,8 +1,8 @@
-ARG JAVA_VERSION=8u252-b09-debian
+ARG JAVA_VERSION=11.0.7_10-debianslim
 ARG LETSENCRYPT_TOMCAT_VERSION=latest
 
-FROM maven:3.6.3-jdk-8-slim as maven
-FROM adoptopenjdk/openjdk8:jre${JAVA_VERSION} as jre
+FROM maven:3.6.3-jdk-11-slim as maven
+FROM adoptopenjdk/openjdk11:jre-${JAVA_VERSION} as jre
 FROM schnatterer/letsencrypt-tomcat:${LETSENCRYPT_TOMCAT_VERSION} as letsencrypt-tomcat
 
 
