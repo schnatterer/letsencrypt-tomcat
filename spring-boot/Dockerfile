@@ -17,7 +17,6 @@ RUN mvn package
 FROM tomcat as aggregator
 ARG DUMB_INIT_VERSION=1.2.2
 ARG DEHYDRATED_VERSION=0.6.5
-ARG RELOADING_CONNECTOR_VERSION=0.1.1
 USER root
 
 RUN apt-get update && apt-get install -y gpg 
@@ -37,11 +36,11 @@ RUN gpg --batch --verify /tmp/dehydrated.tar.gz.asc /tmp/dehydrated.tar.gz
 RUN tar -C /tmp -xf /tmp/dehydrated.tar.gz
 RUN mv /tmp/dehydrated-*/dehydrated /dist/usr/local/bin/dehydrated
 
-RUN mkdir -p /dist/opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge 
+RUN mkdir -p /dist/static/.well-known/acme-challenge
 
 COPY meta-entrypoint.sh /dist/app/
 COPY etc /dist/etc
-RUN mkdir /dist/etc/dehydrated/certs/
+RUN mkdir /dist/certs/
 RUN chmod -R 770 /dist
 
 # Copy APR lib
@@ -50,7 +49,7 @@ RUN cp -r /opt/bitnami/tomcat/lib/ /dist/app/lib
 COPY --from=mavenbuild /app/target/spring-boot-*.jar /dist/app/app.jar
 
 FROM jre
-VOLUME /etc/dehydrated/certs/
+VOLUME /certs/
 COPY --from=aggregator --chown=1001:0 /dist /
 ENV LD_LIBRARY_PATH="/app/lib:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 USER 1001:0

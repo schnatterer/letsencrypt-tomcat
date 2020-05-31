@@ -6,7 +6,7 @@ LOCAL_HTTP_PORT=${LOCAL_HTTP_PORT:-8080}
 STAGING=${STAGING:-'false'}
 NO_COLOR=${NO_COLOR:-''}
 SELF_SIGNED_CERT_VALIDITY_DAYS=${SELF_SIGNED_CERT_VALIDITY_DAYS:-30}
-CERT_DIR=${CERT_DIR:-"/etc/dehydrated/certs/${DOMAIN}"}
+CERT_DIR=${CERT_DIR:-"/certs/${DOMAIN}"}
 export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Ddomain=${DOMAIN}" 
 
 

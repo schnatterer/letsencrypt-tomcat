@@ -26,7 +26,7 @@ Note that:
 sudo docker run --rm -it \
   -p80:8080 -p443:8443 \
   -eDOMAIN=example.com \
-  -v certs:/etc/dehydrated/certs/ \
+  -v certs:/certs/ \
   -eSTAGING=true \
   schnatterer/letsencrypt-tomcat
 # or

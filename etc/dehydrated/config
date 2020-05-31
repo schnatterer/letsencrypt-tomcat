@@ -1,3 +1,4 @@
 # See https://github.com/dehydrated-io/dehydrated/blob/master/docs/examples/config
 
-WELLKNOWN="/opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge"
+WELLKNOWN="/static/.well-known/acme-challenge"
+CERTDIR="/certs"
