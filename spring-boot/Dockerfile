@@ -54,4 +54,4 @@ VOLUME /etc/dehydrated/certs/
 COPY --from=aggregator --chown=1001:0 /dist /
 ENV LD_LIBRARY_PATH="/app/lib:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 USER 1001:0
-ENTRYPOINT [ "/usr/local/bin/dumb-init", "--", "/app/meta-entrypoint.sh", "java", "-jar", "/app/app.jar" ]
+ENTRYPOINT [ "/app/meta-entrypoint.sh", "java", "-jar", "/app/app.jar" ]

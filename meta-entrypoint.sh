@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/local/bin/dumb-init /bin/bash
 set -o errexit -o nounset -o pipefail
 
 export DOMAIN=${DOMAIN:-''}

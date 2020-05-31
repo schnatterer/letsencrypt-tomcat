@@ -40,5 +40,5 @@ RUN chmod -R 770 /dist
 FROM tomcat
 VOLUME /etc/dehydrated/certs/
 COPY --from=aggregator --chown=1001:0 /dist /
-ENTRYPOINT [ "/usr/local/bin/dumb-init", "--", "/app/meta-entrypoint.sh", "/opt/bitnami/scripts/tomcat/entrypoint.sh" ]
+ENTRYPOINT [ "/app/meta-entrypoint.sh", "/opt/bitnami/scripts/tomcat/entrypoint.sh" ]
 CMD [ "/opt/bitnami/scripts/tomcat/run.sh" ]
