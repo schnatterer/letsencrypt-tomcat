@@ -30,7 +30,7 @@ createSelfSignedCert() {
     pk=privkey.pem
     ca=fullchain.pem
     host=localhost
-    ipAddress=$(hostname -I | awk '{print $1}')
+    ipAddress=$(hostname -i | awk '{print $1}')
 
     mkdir -p ${certDir}
     cd "${certDir}"
