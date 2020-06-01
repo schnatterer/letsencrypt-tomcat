@@ -30,9 +30,9 @@ It contains the following directories:
 * `/tomcat-reloading-connector` necessary for standalone tomcat instances so they can reload the certificate at runtime  
   See [standalone example](standalone).
 * `/lib` - pre-compiled version of Apache Portable Runtime (APR) and JNI wrappers for APR used by Tomcat (libtcnative).  
-  Requires glibc and openssl.  
-  See [spring-boot example](spring-boot).  
+  Requires glibc and openssl (works with debian images, for example).  
   For other libc libraries see [here](https://tomcat.apache.org/tomcat-9.0-doc/apr.html) for compiling your own APR libs.
+  See [spring-boot example](spring-boot) or [embedded tomcat example](embedded-tomcat).  
 
 So in your Dockerfile just copy what you need as shown in examples.
 For the whole process to work, your container requires the following packages:
@@ -40,6 +40,9 @@ For the whole process to work, your container requires the following packages:
 * bash,
 * openssl and
 * curl
+
+Your tomcat server must be configured to serve static content from `/static` in order for to be able to answer to the 
+letsencrypt challenges.
 
 # Configuration at runtime
 
@@ -64,6 +67,7 @@ sudo docker run --rm -it \
   schnatterer/letsencrypt-tomcat:standalone
 # or
 # schnatterer/letsencrypt-tomcat:spring-boot
+# schnatterer/letsencrypt-tomcat:embedded-tomcat
 ```
 
 # Building
@@ -74,4 +78,5 @@ docker build -t schnatterer/letsencrypt-tomcat .
 # Build the examples 
 docker build -t schnatterer/letsencrypt-tomcat:standalone --file=standalone/Dockerfile .
 docker build -t schnatterer/letsencrypt-tomcat:spring-boot --file=spring-boot/Dockerfile .
+docker build -t schnatterer/letsencrypt-tomcat:embedded-tomcat --file=embedded-tomcat/Dockerfile .
 ```
