@@ -47,8 +47,10 @@ letsencrypt challenges.
 # Configuration at runtime
 
 * Mandatory: Env var `DOMAIN` that passes the TLD to be used for requesting certificates for
-* Optional: Env var `STAGING`. If set to `true` creates certs against letsencrypt staging, which has no rate limit but 
-  is not accepted by your browser.
+* Optional Env vars: 
+  * `STAGING` - If set to `true` creates certs against letsencrypt staging, which has no rate limit but 
+    is not accepted by your browser.
+  * `ENABLE_LETSENCRYPT` - if set to `false` the letsencrypt process is not started 
 * Persistence: Your certs are stored inside your container at `/certs/` so you might want to persist this folder. 
 
 # Run Examples

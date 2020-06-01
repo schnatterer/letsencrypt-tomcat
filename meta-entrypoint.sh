@@ -3,6 +3,7 @@ set -o errexit -o nounset -o pipefail
 
 export DOMAIN=${DOMAIN:-''}
 LOCAL_HTTP_PORT=${LOCAL_HTTP_PORT:-8080}
+ENABLE_LETSENCRYPT=${ENABLE_LETSENCRYPT:-'true'}
 STAGING=${STAGING:-'false'}
 NO_COLOR=${NO_COLOR:-''}
 SELF_SIGNED_CERT_VALIDITY_DAYS=${SELF_SIGNED_CERT_VALIDITY_DAYS:-30}
@@ -17,7 +18,9 @@ function main() {
     # Create self-signed certs in order to not fail on startup
     createSelfSignedCert
     
-    fetchCerts &
+   if [[ "${ENABLE_LETSENCRYPT}" != "false" ]]; then
+        fetchCerts &
+    fi
     
     export LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
     exec "$@" 
