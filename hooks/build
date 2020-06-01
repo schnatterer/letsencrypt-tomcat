@@ -6,16 +6,18 @@ set -o errexit -o pipefail
 IMAGE_NAME=schnatterer/letsencrypt-tomcat
 
 function main() {
+    # TODO implement logic that for tagged builds that pass the tag version down to these images as build-arg
+    
     docker build -t schnatterer/letsencrypt-tomcat .
     docker push schnatterer/letsencrypt-tomcat
     
-    docker build -t schnatterer/letsencrypt-tomcat:standalone  --file=standalone/Dockerfile .
+    docker build -t schnatterer/letsencrypt-tomcat:standalone  --file=examples/standalone/Dockerfile .
     docker push schnatterer/letsencrypt-tomcat:standalone
     
-    docker build -t schnatterer/letsencrypt-tomcat:spring-boot  --file=spring-boot/Dockerfile .
+    docker build -t schnatterer/letsencrypt-tomcat:spring-boot  --file=examples/spring-boot/Dockerfile .
     docker push schnatterer/letsencrypt-tomcat:spring-boot
 
-    docker build -t schnatterer/letsencrypt-tomcat:embedded-tomcat  --file=embedded-tomcat/Dockerfile .
+    docker build -t schnatterer/letsencrypt-tomcat:embedded-tomcat  --file=examples/embedded-tomcat/Dockerfile .
     docker push schnatterer/letsencrypt-tomcat:embedded-tomcat
 }
 

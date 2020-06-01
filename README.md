@@ -28,11 +28,11 @@ It contains the following directories:
   * `dumb-init` for properly handling your main process and the certificate process
   * `meta-entrypoint.sh` for launching the processes
 * `/tomcat-reloading-connector` necessary for standalone tomcat instances so they can reload the certificate at runtime  
-  See [standalone example](standalone).
+  See [standalone example](examples/standalone).
 * `/lib` - pre-compiled version of Apache Portable Runtime (APR) and JNI wrappers for APR used by Tomcat (libtcnative).  
   Requires glibc and openssl (works with debian images, for example).  
   For other libc libraries see [here](https://tomcat.apache.org/tomcat-9.0-doc/apr.html) for compiling your own APR libs.
-  See [spring-boot example](spring-boot) or [embedded tomcat example](embedded-tomcat).  
+  See [spring-boot example](examples/spring-boot) or [embedded tomcat example](examples/embedded-tomcat).  
 
 So in your Dockerfile just copy what you need as shown in examples.
 For the whole process to work, your container requires the following packages:
@@ -76,7 +76,7 @@ sudo docker run --rm -it \
 # First build the base image ( packages the building blocks for letsencrypt tomcat)
 docker build -t schnatterer/letsencrypt-tomcat .
 # Build the examples 
-docker build -t schnatterer/letsencrypt-tomcat:standalone --file=standalone/Dockerfile .
-docker build -t schnatterer/letsencrypt-tomcat:spring-boot --file=spring-boot/Dockerfile .
-docker build -t schnatterer/letsencrypt-tomcat:embedded-tomcat --file=embedded-tomcat/Dockerfile .
+docker build -t schnatterer/letsencrypt-tomcat:standalone --file=examples/standalone/Dockerfile .
+docker build -t schnatterer/letsencrypt-tomcat:spring-boot --file=examples/spring-boot/Dockerfile .
+docker build -t schnatterer/letsencrypt-tomcat:embedded-tomcat --file=examples/embedded-tomcat/Dockerfile .
 ```

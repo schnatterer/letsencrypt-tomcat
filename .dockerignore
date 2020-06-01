@@ -3,8 +3,6 @@
 # Whitelist
 !meta-entrypoint.sh
 !etc
-!standalone
-!spring-boot
-!embedded-tomcat
+!examples
 **/target
 **/Dockerfile

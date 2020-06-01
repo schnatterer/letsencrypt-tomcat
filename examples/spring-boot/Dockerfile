@@ -9,12 +9,12 @@ FROM schnatterer/letsencrypt-tomcat:${LETSENCRYPT_TOMCAT_VERSION} as letsencrypt
 FROM maven as mavencache
 ENV MAVEN_OPTS=-Dmaven.repo.local=/mvn
 WORKDIR /app
-COPY embedded-tomcat/pom.xml  /app/ 
+COPY examples/spring-boot/pom.xml  /app/ 
 RUN mvn dependency:go-offline
 
 
 FROM mavencache as mavenbuild
-COPY embedded-tomcat /app/
+COPY examples/spring-boot /app/
 RUN mvn package
 
 
@@ -26,11 +26,10 @@ RUN mv /letsencrypt /dist
 RUN cp -r /lib/* /dist/
 
 # Copy app
-COPY --from=mavenbuild /app/target/tomcat-jar-with-dependencies.jar /dist/app/app.jar
-
+COPY --from=mavenbuild /app/target/spring-boot-*.jar /dist/app/app.jar
 
 FROM jre
 VOLUME /certs/
 COPY --from=aggregator --chown=1001:0 /dist /
 USER 1001:0
-ENTRYPOINT [ "/meta-entrypoint.sh", "java", "-jar", "-Dcatalina.home=/tmp", "/app/app.jar" ]
+ENTRYPOINT [ "/meta-entrypoint.sh", "java", "-jar", "/app/app.jar" ]

@@ -19,8 +19,8 @@ RUN mkdir -p /dist/opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge
 RUN rm -rf /dist/static/.well-known/acme-challenge
 RUN ln -s /opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge /dist/static/.well-known/acme-challenge
 
-# Copy standalone tomcat config
-COPY standalone/tomcat /dist/opt/bitnami/tomcat/
+# Copy examples/standalone tomcat config
+COPY examples/standalone/tomcat /dist/opt/bitnami/tomcat/
 
 # Deploy some content
 RUN mkdir -p /dist/opt/bitnami/tomcat/webapps/ROOT
