@@ -51,6 +51,8 @@ letsencrypt challenges.
   * `STAGING` - If set to `true` creates certs against letsencrypt staging, which has no rate limit but 
     is not accepted by your browser.
   * `ENABLE_LETSENCRYPT` - if set to `false` the letsencrypt process is not started 
+  * `CREATE_SELFSIGNED` - if set to `false` no selfsigned certifcate is generated at start up.  
+     Depending on your setup this might result in failing startup of the tomcat connectors
 * Persistence: Your certs are stored inside your container at `/certs/` so you might want to persist this folder. 
 
 # Run Examples
