@@ -4,21 +4,46 @@ set -o errexit -o pipefail
 
 # Don't use docker cloud build's IMAGE_NAME, because it already contains the tag latest.
 IMAGE_NAME=schnatterer/letsencrypt-tomcat
+DOCKER_TAG="latest"
+# Don't repeat "latest" in examples, e.g. :standalone instead of latest-standalone
+DOCKER_TAG_EXAMPLES=""
+
+POTENTIAL_TAG=$(git tag --points-at HEAD)
+if [[ -n "${POTENTIAL_TAG}" ]]; then
+    DOCKER_TAG="${POTENTIAL_TAG}"
+    DOCKER_TAG_EXAMPLES="${POTENTIAL_TAG}-"
+fi
 
 function main() {
-    # TODO implement logic that for tagged builds that pass the tag version down to these images as build-arg
     
-    docker build -t schnatterer/letsencrypt-tomcat .
-    docker push schnatterer/letsencrypt-tomcat
+    docker build --tag schnatterer/letsencrypt-tomcat:${DOCKER_TAG} .
+    push schnatterer/letsencrypt-tomcat:${DOCKER_TAG}
     
-    docker build -t schnatterer/letsencrypt-tomcat:standalone  --file=examples/standalone/Dockerfile .
-    docker push schnatterer/letsencrypt-tomcat:standalone
+    docker build --tag schnatterer/letsencrypt-tomcat:${DOCKER_TAG_EXAMPLES}standalone \
+        --file=examples/standalone/Dockerfile \
+        --build-arg=LETSENCRYPT_TOMCAT_VERSION=${DOCKER_TAG} \
+        .
+    push schnatterer/letsencrypt-tomcat:${DOCKER_TAG_EXAMPLES}standalone
     
-    docker build -t schnatterer/letsencrypt-tomcat:spring-boot  --file=examples/spring-boot/Dockerfile .
-    docker push schnatterer/letsencrypt-tomcat:spring-boot
+    docker build --tag schnatterer/letsencrypt-tomcat:${DOCKER_TAG_EXAMPLES}spring-boot \
+         --file=examples/spring-boot/Dockerfile \
+         --build-arg=LETSENCRYPT_TOMCAT_VERSION=${DOCKER_TAG} \
+         .
+    push schnatterer/letsencrypt-tomcat:${DOCKER_TAG_EXAMPLES}spring-boot
 
-    docker build -t schnatterer/letsencrypt-tomcat:embedded-tomcat  --file=examples/embedded-tomcat/Dockerfile .
-    docker push schnatterer/letsencrypt-tomcat:embedded-tomcat
+    docker build --tag schnatterer/letsencrypt-tomcat:${DOCKER_TAG_EXAMPLES}embedded-tomcat \
+        --file=examples/embedded-tomcat/Dockerfile \
+        --build-arg=LETSENCRYPT_TOMCAT_VERSION=${DOCKER_TAG} \
+        .
+    push schnatterer/letsencrypt-tomcat:${DOCKER_TAG_EXAMPLES}embedded-tomcat
+}
+
+function push() {
+    if [ "${SKIP_PUSH}" = true ] ; then
+        echo "Skipping push, because SKIP_PUSH set to true"
+    else
+        docker push "$1"
+    fi
 }
 
 main "$@"
