@@ -42,22 +42,30 @@ For the whole process to work, your container requires the following packages:
 * curl
 
 Your tomcat server must be configured to serve static content from `/static` in order for to be able to answer to the 
-letsencrypt challenges.
+letsencrypt challenges.  
+In addition, it must serve traffic via port 80, in order to succeed in letsencrypt's http-01 challenge.
+
+If successful, the certificate files will be stored here:
+  * Certificate file: `/certs/${DOMAIN}/cert.pem`
+  * Certificate private key file: `/certs/${DOMAIN}/privkey.pem`
+  * Certificate chain file: `/certs/${DOMAIN}/fullchain.pem`
 
 # Configuration at runtime
 
 * Mandatory: Env var `DOMAIN` that passes the TLD to be used for requesting certificates for
 * Optional Env vars: 
+  * `LOCAL_HTTP_PORT` - (default 8080). Once this (internal) port is ready to receive traffic, the certificate challenge will begin.
   * `STAGING` - If set to `true` creates certs against letsencrypt staging, which has no rate limit but 
     is not accepted by your browser.
   * `ENABLE_LETSENCRYPT` - if set to `false` the letsencrypt process is not started 
   * `CREATE_SELFSIGNED` - if set to `false` no selfsigned certifcate is generated at start up.  
      Depending on your setup this might result in failing startup of the tomcat connectors
-* Persistence: Your certs are stored inside your container at `/certs/` so you might want to persist this folder. 
+* Persistence: Your certs are stored inside your container at `CERT_DIR` (default: `/certs/`), so you might want to 
+  persist this folder.
 
 # Run Examples
 
-Make sure to set the DNS record to match your IP address first.
+First, make sure to set the DNS record to match your IP address and that port 80 and 443 are available.  
 
 Note that:
 - `-v...` Persists your cert in a volume `certs` if left out an anonymous volume is used

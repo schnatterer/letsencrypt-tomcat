@@ -8,7 +8,7 @@ CREATE_SELFSIGNED=${CREATE_SELFSIGNED:-'true'}
 STAGING=${STAGING:-'false'}
 NO_COLOR=${NO_COLOR:-''}
 SELF_SIGNED_CERT_VALIDITY_DAYS=${SELF_SIGNED_CERT_VALIDITY_DAYS:-30}
-CERT_DIR=${CERT_DIR:-"/certs/${DOMAIN}"}
+CERT_DIR=${CERT_DIR:-"/certs/"}
 export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Ddomain=${DOMAIN}" 
 
 
@@ -31,7 +31,8 @@ function main() {
 
 createSelfSignedCert() {
     
-    certDir=${CERT_DIR}
+    # Store in cert per domain (same logic as dehydrated)
+    certDir=${CERT_DIR}/${DOMAIN}
     cert=cert.pem
     pk=privkey.pem
     ca=fullchain.pem
@@ -61,7 +62,7 @@ createSelfSignedCert() {
         openssl x509 -req -in csr.pem -CA ${ca} -CAkey ca.pk.pem -CAcreateserial -out ${cert} -days "${SELF_SIGNED_CERT_VALIDITY_DAYS}" \
                 -extensions v3_ca -extfile <(printf "\n[v3_ca]\n%s" "${subjectAltName}")
     else
-       echo "Certificate found, skipping creation (cert location: ${CERT_DIR}/${cert})"
+       echo "Certificate found, skipping creation (cert location: ${certDir}/${cert})"
     fi
     cd -
 }
@@ -82,7 +83,7 @@ function fetchCerts() {
     
     while [[ "${SIG_INT_RECEIVED}" == 'false' ]]; do
         green "Trying to fetch certificates"
-        dehydrated --domain ${DOMAIN} --cron --accept-terms && exitCode=$? || exitCode=$?
+        dehydrated --domain ${DOMAIN} --cron --accept-terms --out ${CERT_DIR} && exitCode=$? || exitCode=$?
         if [[ "${exitCode}" > 0 ]]; then
             red "Fetching certificates failed"
         fi
