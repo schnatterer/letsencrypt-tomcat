@@ -74,15 +74,15 @@ function fetchCerts() {
    fi
    
    green "Waiting for tomcat to become ready on localhost:${LOCAL_HTTP_PORT}"
-   while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:${LOCAL_HTTP_PORT})" -ge 500 ]]; do sleep 1; done
-   green "Tomcat is ready."
+   until $(curl -s -o /dev/null --head --fail localhost:${LOCAL_HTTP_PORT}); do sleep 1; done
+   green "Tomcat is ready for letsencrypt"
 
     trap 'SIG_INT_RECEIVED="true" && green "Stopping certificate process"' INT 
     
     SIG_INT_RECEIVED='false'
     
     while [[ "${SIG_INT_RECEIVED}" == 'false' ]]; do
-        green "Trying to fetch certificates"
+        green "Fetching certificates"
         dehydrated --domain ${DOMAIN} --cron --accept-terms --out ${CERT_DIR} && exitCode=$? || exitCode=$?
         if [[ "${exitCode}" > 0 ]]; then
             red "Fetching certificates failed"

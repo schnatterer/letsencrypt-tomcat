@@ -4,7 +4,12 @@ import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.startup.Tomcat;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 
 public class Main {
 
@@ -21,7 +26,20 @@ public class Main {
         // Without this call the connector seems not to start
         tomcat.getConnector();
 
-        serveStaticContentFrom(tomcat, "/static");
+        Context ctx = tomcat.addContext("", new File("/static").getAbsolutePath());
+
+        Tomcat.addServlet(ctx, "HelloServlet", new HttpServlet() {
+            @Override
+            protected void service(HttpServletRequest req, HttpServletResponse resp)throws IOException {
+                Writer w = resp.getWriter();
+                w.write("Hello Embedded Tomcat.\n");
+                w.flush();
+                w.close();
+            }
+        });
+        ctx.addServletMappingDecoded("", "HelloServlet");
+        
+        serveStaticContentFrom(ctx);
 
         ReloadingTomcatConnectorFactory.addHttpsConnector(tomcat, HTTPS_PORT, PK, CRT, CA);
 
@@ -29,9 +47,7 @@ public class Main {
         tomcat.getServer().await();
     }
 
-    private static void serveStaticContentFrom(Tomcat tomcat, String docbase) {
-        Context ctx = tomcat.addContext("", new File(docbase).getAbsolutePath());
-
+    private static void serveStaticContentFrom(Context ctx) {
         Wrapper defaultServlet = ctx.createWrapper();
         defaultServlet.setName("default");
         defaultServlet.setServletClass("org.apache.catalina.servlets.DefaultServlet");

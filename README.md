@@ -41,9 +41,11 @@ For the whole process to work, your container requires the following packages:
 * openssl and
 * curl
 
-Your tomcat server must be configured to serve static content from `/static` in order for to be able to answer to the 
-letsencrypt challenges.  
-In addition, it must serve traffic via port 80, in order to succeed in letsencrypt's http-01 challenge.
+Your tomcat server must be configured to
+ * serve static content from `/static/.well-known/acme-challenge` on `http://${DOMAIN}/static/.well-known/acme-challenge` 
+   in order for to be able to answer to the letsencrypt challenges,
+ * serve traffic via port 80 (externally), in order to succeed in letsencrypt's http-01 challenge,
+ * respond with HTTP return code less than 400, on `http://localhost:${LOCAL_HTTP_PORT}/` (default port 8080).
 
 If successful, the certificate files will be stored here:
   * Certificate file: `/certs/${DOMAIN}/cert.pem`
