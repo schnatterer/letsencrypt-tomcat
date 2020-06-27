@@ -4,7 +4,7 @@ FROM bitnami/tomcat:9.0.35-debian-10-r1 as tomcat
 FROM tomcat as aggregator
 ARG DUMB_INIT_VERSION=1.2.2
 ARG DEHYDRATED_VERSION=0.6.5
-ARG RELOADING_CONNECTOR_VERSION=0.2.0
+ARG RELOADING_CONNECTOR_VERSION=0.3.0
 USER root
 
 RUN apt-get update && apt-get install -y gpg 
