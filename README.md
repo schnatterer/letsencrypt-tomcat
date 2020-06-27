@@ -24,10 +24,11 @@ It's a mere container were you can copy the components needed for your app.
 It contains the following directories:
 
 * `/letsencrypt` necessary for all apps:
-  * `dehydrated` for cert retrival
-  * `dumb-init` for properly handling your main process and the certificate process
+  * [`dehydrated`](http://dehydrated.io/) for cert retrival
+  * [`dumb-init`](https://github.com/Yelp/dumb-init) for properly handling your main process and the certificate process
   * `meta-entrypoint.sh` for launching the processes
-* `/tomcat-reloading-connector` necessary for standalone tomcat instances so they can reload the certificate at runtime  
+* `[/tomcat-reloading-connector](https://github.com/schnatterer/tomcat-reloading-connector)` necessary for standalone 
+  tomcat instances, so they can reload the certificate at runtime  
   See [standalone example](examples/standalone).
 * `/lib` - pre-compiled version of Apache Portable Runtime (APR) and JNI wrappers for APR used by Tomcat (libtcnative).  
   Requires glibc and openssl (works with debian images, for example).  

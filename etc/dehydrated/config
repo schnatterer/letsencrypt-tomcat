@@ -1,4 +1,4 @@
 # See https://github.com/dehydrated-io/dehydrated/blob/master/docs/examples/config
 
-# If we could set this via a param we wouldn't need this config file at all (except for staging maybe)
 WELLKNOWN="/static/.well-known/acme-challenge"
+BASEDIR="/dehydrated"

@@ -10,8 +10,8 @@ USER root
 RUN apt-get update && apt-get install -y gpg 
 
 RUN mkdir -p /dist/letsencrypt/usr/local/bin/ \
-             /dist/letsencrypt/var/www/dehydrated \
              /dist/letsencrypt/static/.well-known/acme-challenge \
+             /dist/letsencrypt/dehydrated \
              /dist/tomcat-reloading-connector \
              /dist/lib/usr/local/lib 
 
@@ -31,7 +31,11 @@ RUN mv /tmp/dehydrated-*/dehydrated /dist/letsencrypt/usr/local/bin/dehydrated
 COPY meta-entrypoint.sh /dist/letsencrypt/
 COPY etc /dist/letsencrypt/etc
 RUN mkdir /dist/letsencrypt/certs/
-RUN chmod -R 770 /dist
+# Make certain dirs writable
+RUN chmod -R 770 /dist/letsencrypt/certs/ \
+                 /dist/letsencrypt/static/.well-known/acme-challenge \
+                 /dist/letsencrypt/dehydrated \
+                 /dist/letsencrypt/meta-entrypoint.sh
 
 # Add Tomcat APR Protocol that is able of reloading certificates at runtime
 RUN curl --fail -L https://keybase.io/schnatterer/pgp_keys.asc | gpg --import 
