@@ -1,5 +1,5 @@
 # This is only used as base image to get it's pre-compiled APR images
-FROM bitnami/tomcat:9.0.35-debian-10-r1 as tomcat
+FROM bitnami/tomcat:9.0.44-debian-10-r8 as tomcat
 
 FROM tomcat as aggregator
 ARG DUMB_INIT_VERSION=1.2.2

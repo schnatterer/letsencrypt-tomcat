@@ -1,6 +1,6 @@
 ARG LETSENCRYPT_TOMCAT_VERSION=latest
 
-FROM bitnami/tomcat:9.0.35-debian-10-r1 as tomcat
+FROM bitnami/tomcat:9.0.44-debian-10-r8 as tomcat
 FROM schnatterer/letsencrypt-tomcat:${LETSENCRYPT_TOMCAT_VERSION} as letsencrypt-tomcat
 
 
