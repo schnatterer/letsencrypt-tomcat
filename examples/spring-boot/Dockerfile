@@ -21,6 +21,7 @@ RUN mvn package
 FROM letsencrypt-tomcat as aggregator
 # Copy letsencrypt-related stuff
 RUN mv /letsencrypt /dist
+ENV DEHYDRATED_BASEDIR="/certs/dehydrated"
 
 # Copy Libraries: Apache Portable Runtime (APR) and JNI wrappers for APR used by Tomcat (libtcnative)
 RUN cp -r /lib/* /dist/

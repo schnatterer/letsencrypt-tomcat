@@ -103,9 +103,9 @@
                maxThreads="150" SSLEnabled="true" >
         <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
         <SSLHostConfig>
-            <Certificate certificateKeyFile="/certs/${domain}/privkey.pem"
-                         certificateFile="/certs/${domain}/cert.pem"
-                         certificateChainFile="/certs/${domain}/fullchain.pem"
+            <Certificate certificateKeyFile="${certdir}/${domain}/privkey.pem"
+                         certificateFile="${certdir}/${domain}/cert.pem"
+                         certificateChainFile="${certdir}/${domain}/fullchain.pem"
                          type="RSA" />
         </SSLHostConfig>
     </Connector>

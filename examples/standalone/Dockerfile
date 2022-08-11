@@ -7,17 +7,14 @@ FROM schnatterer/letsencrypt-tomcat:${LETSENCRYPT_TOMCAT_VERSION} as letsencrypt
 FROM letsencrypt-tomcat as aggregator
 # Copy letsencrypt-related stuff
 RUN mv /letsencrypt /dist
+ENV DEHYDRATED_BASEDIR="/certs/dehydrated"
 
 # Copy reloding connector, so tomcat can automatically reload certificates at runtime
 RUN mkdir -p /dist/opt/bitnami/tomcat/lib/
 RUN cp -r /tomcat-reloading-connector/* /dist/opt/bitnami/tomcat/lib/
 
-# Make standalone tomcat serve static files in directories used for letsencrypt challenges
-RUN mkdir -p /dist/opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge
-# It would be simpler to link ROOT -> static but it seems that tomcat does not follow symlinks when serving static content
-# So just do it the other way round
-RUN rm -rf /dist/static/.well-known/acme-challenge
-RUN ln -s /opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge /dist/static/.well-known/acme-challenge
+# set directory where dehydrated will create .well-known/acme-challenge
+ENV DEHYDRATED_WELLKNOWN="/opt/bitnami/tomcat/webapps/ROOT"
 
 # Copy examples/standalone tomcat config
 COPY examples/standalone/tomcat /dist/opt/bitnami/tomcat/
