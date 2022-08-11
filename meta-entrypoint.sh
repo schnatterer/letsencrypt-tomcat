@@ -70,6 +70,8 @@ createSelfSignedCert() {
 }
 
 function fetchCerts() {
+   mkdir -vp "$DEHYDRATED_BASEDIR"
+   mkdir -vp "$DEHYDRATED_WELLKNOWN"
 
    if [[ "${STAGING}" == "true" ]]; then
      echo 'CA="https://acme-staging-v02.api.letsencrypt.org/directory"' >> /etc/dehydrated/config
