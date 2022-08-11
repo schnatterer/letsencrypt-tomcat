@@ -8,8 +8,10 @@ CREATE_SELFSIGNED=${CREATE_SELFSIGNED:-'true'}
 STAGING=${STAGING:-'false'}
 NO_COLOR=${NO_COLOR:-''}
 SELF_SIGNED_CERT_VALIDITY_DAYS=${SELF_SIGNED_CERT_VALIDITY_DAYS:-30}
-CERT_DIR=${CERT_DIR:-"/certs/"}
-export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Ddomain=${DOMAIN}" 
+: "${CERT_DIR:="${DEHYDRATED_BASEDIR}/certs"}"
+: "${DEHYDRATED_BASEDIR:="/dehydrated"}"
+: "${DEHYDRATED_WELLKNOWN:="/static"}"
+export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Dcertdir=${CERT_DIR} -Ddomain=${DOMAIN}"
 
 
 function main() {
