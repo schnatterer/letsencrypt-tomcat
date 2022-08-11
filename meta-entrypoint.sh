@@ -87,7 +87,7 @@ function fetchCerts() {
     
     while [[ "${SIG_INT_RECEIVED}" == 'false' ]]; do
         green "Fetching certificates"
-        dehydrated --domain ${DOMAIN} --cron --accept-terms --out ${CERT_DIR} && exitCode=$? || exitCode=$?
+        dehydrated --domain ${DOMAIN} --cron --accept-terms && exitCode=$? || exitCode=$?
         if [[ "${exitCode}" > 0 ]]; then
             red "Fetching certificates failed"
         fi
