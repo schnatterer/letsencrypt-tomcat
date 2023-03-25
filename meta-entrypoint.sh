@@ -8,8 +8,11 @@ CREATE_SELFSIGNED=${CREATE_SELFSIGNED:-'true'}
 STAGING=${STAGING:-'false'}
 NO_COLOR=${NO_COLOR:-''}
 SELF_SIGNED_CERT_VALIDITY_DAYS=${SELF_SIGNED_CERT_VALIDITY_DAYS:-30}
-CERT_DIR=${CERT_DIR:-"/certs/"}
-export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Ddomain=${DOMAIN}" 
+: "${CERT_DIR:="${DEHYDRATED_BASEDIR}/certs"}"
+: "${DEHYDRATED_BASEDIR:="/dehydrated"}"
+: "${DEHYDRATED_WELLKNOWN:="/static"}"
+export CERT_DIR DEHYDRATED_BASEDIR DEHYDRATED_WELLKNOWN
+export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Dcertdir=${CERT_DIR} -Ddomain=${DOMAIN}"
 
 
 function main() {
@@ -68,6 +71,8 @@ createSelfSignedCert() {
 }
 
 function fetchCerts() {
+   mkdir -vp "$DEHYDRATED_BASEDIR"
+   mkdir -vp "$DEHYDRATED_WELLKNOWN"
 
    if [[ "${STAGING}" == "true" ]]; then
      echo 'CA="https://acme-staging-v02.api.letsencrypt.org/directory"' >> /etc/dehydrated/config
@@ -83,7 +88,7 @@ function fetchCerts() {
     
     while [[ "${SIG_INT_RECEIVED}" == 'false' ]]; do
         green "Fetching certificates"
-        dehydrated --domain ${DOMAIN} --cron --accept-terms --out ${CERT_DIR} && exitCode=$? || exitCode=$?
+        dehydrated --domain ${DOMAIN} --cron --accept-terms && exitCode=$? || exitCode=$?
         if [[ "${exitCode}" > 0 ]]; then
             red "Fetching certificates failed"
         fi

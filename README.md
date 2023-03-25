@@ -49,9 +49,9 @@ Your tomcat server must be configured to
  * respond with HTTP return code less than 400, on `http://localhost:${LOCAL_HTTP_PORT}/` (default port 8080).
 
 If successful, the certificate files will be stored here:
-  * Certificate file: `/certs/${DOMAIN}/cert.pem`
-  * Certificate private key file: `/certs/${DOMAIN}/privkey.pem`
-  * Certificate chain file: `/certs/${DOMAIN}/fullchain.pem`
+  * Certificate file: `${CERT_DIR}/${DOMAIN}/cert.pem`
+  * Certificate private key file: `${CERT_DIR}/${DOMAIN}/privkey.pem`
+  * Certificate chain file: `${CERT_DIR}/${DOMAIN}/fullchain.pem`
 
 # Configuration at runtime
 
@@ -63,8 +63,20 @@ If successful, the certificate files will be stored here:
   * `ENABLE_LETSENCRYPT` - if set to `false` the letsencrypt process is not started 
   * `CREATE_SELFSIGNED` - if set to `false` no selfsigned certifcate is generated at start up.  
      Depending on your setup this might result in failing startup of the tomcat connectors
-* Persistence: Your certs are stored inside your container at `CERT_DIR` (default: `/certs/`), so you might want to 
-  persist this folder.
+  * `DEHYDRATED_BASEDIR` - defaults to `/dehydrated` for compatibility with letsencrypt-tomcat <= 0.40.
+  * `CERT_DIR` - if `DEHYDRATED_BASEDIR` is set, defaults to `$DEHYDRATED_BASEDIR/certs`, which is the default of dehydrated. If `DEHYDRATED_BASEDIR` is not set, defaults to `/certs` to be compatible with older letsencrypt-tomcat releases <=0.4.0.
+  * `DEHYDRATED_WELLKNOWN` - path where dehydrated will place ACME challenge files. Should usually be the document root of a webserver with `/.well-known/acme-challenge` appended.
+
+Note: if you want to save certificates and accounts in persistent storage it is highly recommended to set `DEHYDRATED_BASEDIR` env variable as described below.
+
+`DEHYDRATED_BASEDIR` and `CERT_DIR` interact:
+  * default (<=0.4.0) if `DEHYDRATED_BASEDIR` is not set:
+    * `DEHYDRATED_BASEDIR="/dehydrated" CERT_DIR="/certs"`
+    * `/dehydrated` is not stored in persistent storage and will be deleted with the container (including the letsencrypt account)
+  * recommended (>0.4.0):
+    * set `DEHYDRATED_BASEDIR="/certs/dehydrated"`. This will set `CERT_DIR="$DEHYDRATED_BASEDIR/certs"`. This allows all the certificates and dehydrated state (most importantly, accounts) to be stored in one directory, usually a volume mounted at `/certs`.
+
+It is possible to set environment variables in any place Docker supports, and will make them set in the container. This is: in a Dockerfile, as run parameters, as docker-compose.yml configuration, or in an .env file.
 
 # Run Examples
 

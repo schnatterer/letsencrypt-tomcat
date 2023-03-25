@@ -15,7 +15,7 @@ public class Main {
 
     private static final int HTTPS_PORT = 8443;
     public static final String DOMAIN = System.getenv("DOMAIN");
-    public static final String CERT_FOLDER = "/certs/";
+    public static final String CERT_FOLDER = System.getenv("CERT_DIR");
     public static final String PK = CERT_FOLDER + DOMAIN + "/privkey.pem";
     public static final String CRT = CERT_FOLDER + DOMAIN + "/cert.pem";
     public static final String CA = CERT_FOLDER + DOMAIN + "/fullchain.pem";

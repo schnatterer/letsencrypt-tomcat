@@ -1,4 +1,5 @@
 # See https://github.com/dehydrated-io/dehydrated/blob/master/docs/examples/config
 
-WELLKNOWN="/static/.well-known/acme-challenge"
-BASEDIR="/dehydrated"
+WELLKNOWN="$DEHYDRATED_WELLKNOWN"
+BASEDIR="$DEHYDRATED_BASEDIR"
+CERTDIR="$CERT_DIR"
