@@ -11,6 +11,7 @@ SELF_SIGNED_CERT_VALIDITY_DAYS=${SELF_SIGNED_CERT_VALIDITY_DAYS:-30}
 : "${CERT_DIR:="${DEHYDRATED_BASEDIR}/certs"}"
 : "${DEHYDRATED_BASEDIR:="/dehydrated"}"
 : "${DEHYDRATED_WELLKNOWN:="/static"}"
+export CERT_DIR DEHYDRATED_BASEDIR DEHYDRATED_WELLKNOWN
 export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Dcertdir=${CERT_DIR} -Ddomain=${DOMAIN}"
 
 

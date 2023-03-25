@@ -65,7 +65,7 @@ If successful, the certificate files will be stored here:
      Depending on your setup this might result in failing startup of the tomcat connectors
   * `DEHYDRATED_BASEDIR` - defaults to `/dehydrated` for compatibility with letsencrypt-tomcat <= 0.40.
   * `CERT_DIR` - if `DEHYDRATED_BASEDIR` is set, defaults to `$DEHYDRATED_BASEDIR/certs`, which is the default of dehydrated. If `DEHYDRATED_BASEDIR` is not set, defaults to `/certs` to be compatible with older letsencrypt-tomcat releases <=0.4.0.
-  * `DEHYDRATED_WELLKNOWN` - path where dehydrated will place .well-known/acme-challenge. Should usually be the document root of a webserver.
+  * `DEHYDRATED_WELLKNOWN` - path where dehydrated will place ACME challenge files. Should usually be the document root of a webserver with `/.well-known/acme-challenge` appended.
 
 Note: if you want to save certificates and accounts in persistent storage it is highly recommended to set `DEHYDRATED_BASEDIR` env variable as described below.
 

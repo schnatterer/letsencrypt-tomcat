@@ -13,8 +13,8 @@ ENV DEHYDRATED_BASEDIR="/certs/dehydrated"
 RUN mkdir -p /dist/opt/bitnami/tomcat/lib/
 RUN cp -r /tomcat-reloading-connector/* /dist/opt/bitnami/tomcat/lib/
 
-# set directory where dehydrated will create .well-known/acme-challenge
-ENV DEHYDRATED_WELLKNOWN="/opt/bitnami/tomcat/webapps/ROOT"
+# set directory where dehydrated will create ACME challenge files
+ENV DEHYDRATED_WELLKNOWN="/opt/bitnami/tomcat/webapps/ROOT/.well-known/acme-challenge"
 
 # Copy examples/standalone tomcat config
 COPY examples/standalone/tomcat /dist/opt/bitnami/tomcat/
